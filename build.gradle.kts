@@ -14,7 +14,7 @@ group = "se.r2m.kotlin.spam.skeleton"
 version = "0.0.1"
 
 application {
-    mainClassName = "io.ktor.server.netty.EngineMain"
+    mainClassName = "se.r2m.kotlin.aw.SpammyKt"
 }
 
 repositories {

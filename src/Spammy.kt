@@ -1,8 +1,12 @@
+package se.r2m.kotlin.aw
+
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.features.json.GsonSerializer
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.get
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 val webclient = HttpClient(Apache) {
     install(JsonFeature) {
@@ -20,15 +24,27 @@ const val dataStringExample = """
 """
 
 data class SendMe(
-        val a: Nothing = TODO("IMPLEMENT ME")
+        val a: Nothing = TODO("Implement the SendMe data class.")
 )
 
+
 // Just run me in intellij, or in terminal.
+// `suspend` is used to be able to run coroutine functions - such as the ktor webclient.
 suspend fun main() {
-
-    //TODO("Post an object instead of getting a string.")
-    println("Going to get the website of google.")
-    val a = webclient.get<String>("http://google.com")
-    println("Google answered: $a")
-
+    val list: MutableList<Deferred<Any>> = mutableListOf()
+    repeat(5) {
+        list.add(
+            GlobalScope.async(Dispatchers.IO) {
+                //TODO("Post an object instead of getting a string.")
+                println("Going to get the website of google.")
+                val a = webclient.get<String>("http://google.com")
+                delay(1000)
+                println("Google answered: $a")
+            }
+        )
+    }
+    // Let all run before we continue and exit.
+    list.forEach {
+        it.await()
+    }
 }
