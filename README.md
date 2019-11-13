@@ -31,5 +31,5 @@ application {
 ## Other tasks?
 Gradle can display other tasks using:
 ```shell script
-./gradle tasks
+./gradlew tasks
 ```
